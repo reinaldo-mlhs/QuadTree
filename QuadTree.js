@@ -1,4 +1,4 @@
-export class Boundary {
+class Boundary {
     constructor(center, halfDimension) {
         this.center = center;
         this.halfDimension = halfDimension;
@@ -38,7 +38,7 @@ export class Boundary {
     }
 }
 
-export class QuadTree {
+class QuadTree {
     constructor(boundary) {
         this.capacity = 8;
         this.boundary = boundary;
