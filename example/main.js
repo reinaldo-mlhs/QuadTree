@@ -19,9 +19,9 @@ const boundary = new Boundary({x: 200, y: 200}, 200);
 const quad = new QuadTree(boundary);
 
 
-const points = Array.from(Array(20).fill(0), () => ({x: getRandomInt(0, 400), y: getRandomInt(0, 400) }))
+const entities = Array.from(Array(20).fill(0), () => ({id: Math.random(), point: {x: getRandomInt(0, 400), y: getRandomInt(0, 400) }}))
 
-points.forEach(point => quad.insert(point));
+entities.forEach(entity => quad.insert(entity));
 
 console.log(quad);
 

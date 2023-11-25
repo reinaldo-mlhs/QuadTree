@@ -42,7 +42,7 @@ class QuadTree {
     constructor(boundary) {
         this.capacity = 8;
         this.boundary = boundary;
-        this.points = [];
+        this.entities = [];
 
         this.northWest = null;
         this.northEast = null;
@@ -50,14 +50,16 @@ class QuadTree {
         this.southWest = null;
     }
 
-    insert(point) {
+    insert(entity) {
+
+        const point = entity.point;
 
         if (!this.boundary.containsPoint(point)) {
             return false;
         }
 
-        if (this.points.length < this.capacity && this.northWest === null) {
-            this.points.push(point);
+        if (this.entities.length < this.capacity && this.northWest === null) {
+            this.entities.push(entity);
             return true;
         }
 
@@ -65,16 +67,16 @@ class QuadTree {
             this.subdivide();
         }
 
-        if (this.northWest.insert(point)) {
+        if (this.northWest.insert(entity)) {
             return true;
         }
-        else if (this.northEast.insert(point)) {
+        else if (this.northEast.insert(entity)) {
             return true;
         }
-        else if (this.southWest.insert(point)) {
+        else if (this.southWest.insert(entity)) {
             return true;
         }
-        else if (this.southEast.insert(point)) {
+        else if (this.southEast.insert(entity)) {
             return true;
         }
 
@@ -97,39 +99,40 @@ class QuadTree {
 
     queryRange(range) {
 
-        const pointsInRange = [];
+        const entitiesInRange = [];
 
         if (!this.boundary.intersectsRange(range)) {
-            return pointsInRange;
+            return entitiesInRange;
         }
 
-        this.points.forEach(point => {
-            if (range.containsPoint(point)) {
-                pointsInRange.push(point);
+        this.entities.forEach(entity => {
+            
+            if (range.containsPoint(entity.point)) {
+                entitiesInRange.push(entity);
             }
         })
 
         if (this.northWest === null) {
-            return pointsInRange;
+            return entitiesInRange;
         }
         
-        pointsInRange.push(this.northWest.queryRange(range));
-        pointsInRange.push(this.northEast.queryRange(range));
-        pointsInRange.push(this.southWest.queryRange(range));
-        pointsInRange.push(this.southEast.queryRange(range));
+        entitiesInRange.push(this.northWest.queryRange(range));
+        entitiesInRange.push(this.northEast.queryRange(range));
+        entitiesInRange.push(this.southWest.queryRange(range));
+        entitiesInRange.push(this.southEast.queryRange(range));
 
-        return pointsInRange.flat();
+        return entitiesInRange.flat();
 
     }
 
-    update(points) {
-        this.points = [];
+    update(entities) {
+        this.entities = [];
 
         this.northWest = null;
         this.northEast = null;
         this.southEast = null;
         this.southWest = null;
 
-        points.forEach(point => this.insert(point));
+        entities.forEach(entity => this.insert(entity));
     }
 }
