@@ -121,4 +121,15 @@ export class QuadTree {
         return pointsInRange.flat();
 
     }
+
+    update(points) {
+        this.points = [];
+
+        this.northWest = null;
+        this.northEast = null;
+        this.southEast = null;
+        this.southWest = null;
+
+        points.forEach(point => this.insert(point));
+    }
 }
